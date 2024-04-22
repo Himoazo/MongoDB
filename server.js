@@ -60,7 +60,17 @@ app.post("/workexperiences", async(req, res)=>{
     }
 });
 
+app.delete("/workexperiences/:id", async(req, res)=>{
+    let id = req.params.id;
 
+    try{
+        let result = await workexperience.deleteOne({_id: id});
+       
+        return res.json(result);
+    }catch(error){
+        return res.status(500).json(error);
+    }
+});
 
 //Startar server
 app.listen(port, ()=>{
