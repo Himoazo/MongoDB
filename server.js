@@ -4,14 +4,16 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
-const port = 3000;
+require("dotenv").config();
+const port = process.env.PORT;
 
 //Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/cv").then(()=>{
-    console.log("Kopplat till MongoDB");
+mongoose.connect(process.env.uri).then(()=>{
+    console.log("Kopplat till MongoDB Atlas");
 }).catch((error)=>{
     console.log("Det gick inte att koppla till db " + error);
 });
+
 
 //Schema
 const expSchema = new mongoose.Schema({
@@ -39,7 +41,7 @@ const expSchema = new mongoose.Schema({
 
 const workexperience = mongoose.model("workexperience", expSchema);
 
-//Routes
+//Hantera GET requests
 app.get("/workexperiences", async(req, res)=>{
     try{
         let result = await workexperience.find({});
@@ -50,6 +52,7 @@ app.get("/workexperiences", async(req, res)=>{
     }
 });
 
+//Hantera POST requests
 app.post("/workexperiences", async(req, res)=>{
     try{
         let result = await workexperience.create(req.body);
@@ -60,6 +63,7 @@ app.post("/workexperiences", async(req, res)=>{
     }
 });
 
+//Hantera DELETE requests
 app.delete("/workexperiences/:id", async(req, res)=>{
     let id = req.params.id;
 
@@ -72,11 +76,10 @@ app.delete("/workexperiences/:id", async(req, res)=>{
     }
 });
 
+//Hantera PUT requests
 app.put("/workexperiences/:id", async(req, res)=>{
     let id = req.params.id;
     let exp = req.body;
-    
-    
 
     try{
         let result = await workexperience.updateOne({_id: id}, {$set: exp});
