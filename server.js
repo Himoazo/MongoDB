@@ -72,6 +72,21 @@ app.delete("/workexperiences/:id", async(req, res)=>{
     }
 });
 
+app.put("/workexperiences/:id", async(req, res)=>{
+    let id = req.params.id;
+    let exp = req.body;
+    
+    
+
+    try{
+        let result = await workexperience.updateOne({_id: id}, {$set: exp});
+       
+        return res.json(result);
+    }catch(error){
+        return res.status(500).json(error);
+    }
+});
+
 //Startar server
 app.listen(port, ()=>{
     console.log("kopplat till server på port: " + port);
