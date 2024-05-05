@@ -80,7 +80,9 @@ app.delete("/workexperiences/:id", async(req, res)=>{
 app.put("/workexperiences/:id", async(req, res)=>{
     let id = req.params.id;
     let exp = req.body;
-
+    if(exp.enddate == "Pågående" || exp.enddate == ""){
+        exp.enddate = null;
+    }
     try{
         let result = await workexperience.updateOne({_id: id}, {$set: exp});
        
